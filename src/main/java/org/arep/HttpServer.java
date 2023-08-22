@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HttpServer {
 
     private static final String USER_AGENT = "Mozilla/5.0";
-    private static final String URL_STRING = "http://www.omdbapi.com/";
+    private static final String URL = "https://omdbapi.com/?t=%S&apikey=1d53bda9";
     private static final String KEY_STRING = "f8ed47c";
     public static final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
 
@@ -88,36 +88,39 @@ public class HttpServer {
      */
     public static String getHello(String movie) throws IOException {
         String Movie = "";
-        if (cache.containsKey(movie)) {
-            Movie = cache.get(movie);
-            return Movie;
-        }
-        String formato = String.format(URL_STRING, movie,KEY_STRING);
-        URL obj = new URL(formato);
-        HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("User-Agent", USER_AGENT);
-
-        int Code = connection.getResponseCode();
-        System.out.println("GET Response Code :: " + Code);
-
-        if (Code == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            String inputLine;
-            StringBuffer responsed = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                responsed.append(inputLine);
+        if(movie !=null) {
+            if (cache.containsKey(movie)) {
+                Movie = cache.get(movie);
+                return Movie;
             }
-            in.close();
-            Movie = responsed.toString();
-            cache.put(movie, Movie);
-        } else {
-            System.out.println("GET request not worked");
+            String formato = String.format(URL, movie);
+            URL obj = new URL(formato);
+            HttpURLConnection connection = (HttpURLConnection) obj.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", USER_AGENT);
+
+            int Code = connection.getResponseCode();
+            System.out.println("GET Response Code :: " + Code);
+
+            if (Code == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        connection.getInputStream()));
+                String inputLine;
+                StringBuffer responsed = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    responsed.append(inputLine);
+                }
+                in.close();
+                Movie = responsed.toString();
+                cache.put(movie, Movie);
+            } else {
+                System.out.println("GET request not worked");
+            }
+            System.out.println("GET DONE");
         }
-        System.out.println("GET DONE");
-        return Movie;
+            return Movie;
+
     }
 
     /**
