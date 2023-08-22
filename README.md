@@ -19,13 +19,23 @@ para usarlo se debe ingresar a un navegador de busqueda y colocar:
 ```
 localhost:35000
 ````
-y luego encontraremos esta pantalla a la cual se le hizo un diseño basico pero agradable al usuario en donde al presionar la tecla de busqueda cambia de color
+y luego encontraremos esta pantalla a la cual se le hizo un diseño basico pero agradable al usuario
+ en donde al presionar la tecla de busqueda cambia de color
+
 ![](./img/1.png)
+
 luego podemos observar las diferentes busquedas que se realizaron
+
 ![](./img/2.png)
+
 ![](./img/3.png)
+
 ![](./img/4.png)
+
 ahora observamos en el terminal como aparece la busqueda en el servidor
+
 ![](./img/5.png)
+
 y por ultimo mostramos las pruebas unitarias funcionando correctamente
+
 ![](./img/6.png)
