@@ -48,6 +48,9 @@ incluyendo páginas html, archivos java script, css e imágenes. Construya una a
 javascript, css, e imágenes para probar su servidor. Incluya en la aplicación la comunicación asíncrona
 con unos servicios REST en el backend. NO use frameworks web como Spark o Spring, use solo Java y las librerías para manejo de la red.
 ````
+
 se realizo los respectivos cambios al codigo anterior para que retornara los archivos solicitados
+
 ![](src/main/resources/public/img/7.png)
+
 ![](src/main/resources/public/img/8.png)
