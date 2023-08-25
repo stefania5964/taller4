@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <title>Búsqueda</title>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="apps/index.css">
+    <script type="text/javascript" src="apps/index.js"></script>
+
 </head>
 <body>
+<h1>Buscar Película</h1>
+<form class="form" action="/form">
+    <label for="postname">Nombre:</label><br>
+    <input type="text" id="postname" name="name" value="" placeholder="Ingresa el nombre" required><br>
+    <input class="btn" type="button" value="Search" onclick="loadPostMsg(postname)">
+</form>
+<div class="container" id="postrespmsg"></div>
 
-</body>
+  </body>
 </html>

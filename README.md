@@ -39,3 +39,15 @@ ahora observamos en el terminal como aparece la busqueda en el servidor
 y por ultimo mostramos las pruebas unitarias funcionando correctamente
 
 ![](src/main/resources/public/img/6.png)
+
+#TALLER DISEÑO Y ESTRUCTURACIÓN DE APLICACIONES DISTRIBUIDAS EN INTERNET
+````
+Escriba un servidor web que soporte múlltiples solicitudes seguidas (no concurrentes). 
+El servidor debe leer los archivos del disco local y retornar todos los archivos solicitados,
+incluyendo páginas html, archivos java script, css e imágenes. Construya una aplicación web con 
+javascript, css, e imágenes para probar su servidor. Incluya en la aplicación la comunicación asíncrona
+con unos servicios REST en el backend. NO use frameworks web como Spark o Spring, use solo Java y las librerías para manejo de la red.
+````
+se realizo los respectivos cambios al codigo anterior para que retornara los archivos solicitados
+![](src/main/resources/public/img/7.png)
+![](src/main/resources/public/img/8.png)
