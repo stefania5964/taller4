@@ -3,6 +3,10 @@
 mediante la API https://omdbapi.com/ Se le pide que su implementación sea eficiente en cuanto a recursos 
 así que debe implementar un Caché que permita evitar hacer consultas repetidas al API externo
 La arquitectura debe tener las siguientes características.
+###Installing
+```
+git clone https://github.com/stefania5964/taller3.git`
+```
 
 -El cliente Web debe ser un cliente asíncrono que corra en el browser  y use Json como formato para los mensajes.
 -El servidor de servirá como un gateway para encapsular llamadas a otros servicios Web externos.
@@ -18,7 +22,9 @@ La arquitectura debe tener las siguientes características.
 para usarlo se debe ingresar a un navegador de busqueda y colocar:
 ```
 localhost:35000
+
 ````
+
 y luego encontraremos esta pantalla a la cual se le hizo un diseño basico pero agradable al usuario
  en donde al presionar la tecla de busqueda cambia de color
 
@@ -32,25 +38,41 @@ luego podemos observar las diferentes busquedas que se realizaron
 
 ![](src/main/resources/public/img/4.png)
 
-ahora observamos en el terminal como aparece la busqueda en el servidor
 
-![](src/main/resources/public/img/5.png)
+##Microframeworks WEB
 
-y por ultimo mostramos las pruebas unitarias funcionando correctamente
+En este taller usted debe explorar la arquitectura del microframework WEB denominado sparkweb (https://sparkjava.com/). Este micro framework permite construir aplicaciones web de manera simple usando funciones lambda.
 
-![](src/main/resources/public/img/6.png)
+Para este ejercicio usted deb construir un  servidor web para soportar una funcionalidad similar a la de Spark. Su aplicación debe permitir por lo menos el registro de servicios get y post usando funciones lambda. Implemente igualmente funciones que le permitan configurar el directorio de los archivos estáticos, y otra que permita cambiar el tipo de la respuesta a "application/json". Para esto solo debe usar el API básico de Java. No utilice frameworks como Spark o Spring.
 
-#TALLER DISEÑO Y ESTRUCTURACIÓN DE APLICACIONES DISTRIBUIDAS EN INTERNET
-````
-Escriba un servidor web que soporte múlltiples solicitudes seguidas (no concurrentes). 
-El servidor debe leer los archivos del disco local y retornar todos los archivos solicitados,
-incluyendo páginas html, archivos java script, css e imágenes. Construya una aplicación web con 
-javascript, css, e imágenes para probar su servidor. Incluya en la aplicación la comunicación asíncrona
-con unos servicios REST en el backend. NO use frameworks web como Spark o Spring, use solo Java y las librerías para manejo de la red.
-````
+* Su servidor debe:
+-Permite configurar servicios web de tipo GET y POST usando funciones lambda.
+-Entrega archivos estáticos como páginas HTML, CSS, JS e imágenes.
+-Permite configurar el directorio de donde se leerán los archivos estáticos.
+-Permite leer parámetros del query  desde los programas.
+*Adicionalmente:
 
-se realizo los respectivos cambios al codigo anterior para que retornara los archivos solicitados
+-Construya un ejemplo que muestre cómo de desarrollarían las aplicaciones en su servidor.
+-Pruebe su proyecto , e incluya una prueba de su proyecto corriendo en al menos dos sistemas operativos diferentes (Windows y linux)
 
-![](src/main/resources/public/img/7.png)
+### GET y POST
+en este caso el recurso hello nos devolvera 
 
-![](src/main/resources/public/img/8.png)
+```
+Hello, this is a program
+```
+![](src/main/resources/public/img/9.png)
+
+luego permite cambiar el tipo de la respuesta a "application/json".
+en este caso el recurso  get-json nos devolvera 
+
+```
+{"message": "Stefania"}
+```
+
+![](src/main/resources/public/img/10.png)
+
+falta implementar mejor el post 
+
+![](src/main/resources/public/img/11.png)
+

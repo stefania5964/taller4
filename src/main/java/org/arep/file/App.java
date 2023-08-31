@@ -13,15 +13,22 @@ public class App {
             return response;});
 
         server.get("/get-json", (req, respuesta) -> {
-            String jsonResponse = "{\"message\": \"Stefania\"}";
-            String response = "HTTP/1.1 200 OK\r\n" +
-                    "Content-Type: application/json\r\n" +
-                    "\r\n" +
-                    jsonResponse;
-            return  response;
-        });
 
-        
+            respuesta.type("application/json");
+            String jsonResponse = "{\"message\": \"Stefania\"}";
+            return  jsonResponse;
+        });
+        server.post("/json-post", (req, respuesta) -> {
+            respuesta.type("application/json");
+            String jsonResponse = "{\"message\": \"Stefania\"}";
+            return jsonResponse;
+        });
+        server.post("/submit-json", (req, respuesta) -> {
+
+            respuesta.type("application/json");
+            String jsonResponse = "{\"message\": \"Stefania\"}";
+            return jsonResponse;});
+
 
         server.run(args);
     }
