@@ -8,8 +8,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.nio.file.Files;
-
 /**
  * server gets the movie search services
  */
@@ -25,6 +23,10 @@ public class HttpServer {
     private static final String USER_AGENT = "Mozilla/5.0";
     private static final String URL = "https://omdbapi.com/?t=%S&apikey=1d53bda9";
     public static final ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<>();
+    private Map<String, Handler> getHandlers = new HashMap<>();
+    private Map<String, Handler> postHandlers = new HashMap<>();
+    public final StaticFil staticFiles = new StaticFil();
+
 
     /**
      * main is the method stars the server and requests search
@@ -73,22 +75,38 @@ public class HttpServer {
                 }
             }
 
-            if (request.startsWith("/form?") && method.equals("POST")) {
-                String requestedMovie = request.replace("/form?name=", "");
-                outputLine = "HTTP/1.1 200 OK\r\n" +
-                        "Content-type: application/json\r\n"+
-                        "\r\n"
-                        + getHello(requestedMovie.toLowerCase());
-
-            }else if(request.startsWith("/apps/")){
-                outputLine= getStaticFile(request.substring(5));
-
-
-            } else if (request.equalsIgnoreCase("/")){
-                outputLine = getStaticFile("/form");
-            }else{
-                outputLine = getStaticFile("/404");
+            String requestedMovie;
+            if (method.equalsIgnoreCase("GET")) {
+                try {
+                    if (request.equalsIgnoreCase("/")) {
+                        outputLine = staticFiles.getFile("/apps/form.html");
+                    } else if (staticFiles.checkFile(request)) {
+                        System.out.println("ESTÁ EN STATIC");
+                        outputLine = staticFiles.getFile(request);
+                    } else {
+                        outputLine = getHandlers.get(request).getResponse();
+                    }
+                }
+                catch (NullPointerException e) {
+                    outputLine = "";
+                }
+            } else /*if (method.equalsIgnoreCase("POST"))*/ {
+                try {
+                    if (request.startsWith("/form?")) {
+                        requestedMovie = request.replace("/form?s=", "");
+                        outputLine = "HTTP/1.1 200 OK\r\n" +
+                                "Content-type: application/json\r\n" +
+                                "\r\n"
+                                + getHello(requestedMovie.toLowerCase());
+                    } else {
+                        System.out.println("DEVOLVIENDO: " + postHandlers.get(request).getResponse());
+                        outputLine = postHandlers.get(request).getResponse();
+                    }
+                } catch (NullPointerException e) {
+                    outputLine = "";
+                }
             }
+
             out.println(outputLine);
             out.close();
             in.close();
@@ -96,28 +114,47 @@ public class HttpServer {
         }
         serverSocket.close();
     }
+    public interface Route {
+        String handle(String req, Handler han);
+    }
+
+
+
+    public void addService(String key, Rest service) {
+        services.put(key, service);
+    }
     private String getStaticFile(String Name)  {
         Rest rest = services.get(Name);
         String header = rest.getHeader();
         String body = rest.getBody();
         return header + body;
     }
-    public void addService(String key, Rest service) {
-        services.put(key, service);
+
+
+    /**
+     * Adds a GET request handler for a specified path.
+     * @param path
+     * @param route
+     */
+    public void get(String path, Route route) {
+        Handler han= new Handler();
+        han.body(route.handle("req", han));
+        getHandlers.put(path, han);
     }
 
-    public static String getContentType(String fileName) {
-        if (fileName.endsWith(".html")) {
-            return "text/html";
-        } else if (fileName.endsWith(".css")) {
-            return "text/css";
-        } else if (fileName.endsWith(".js")) {
-            return "text/javascript";
-        } else {
-
-            return "text/plain";
-        }
+    /**
+     * Adds a POST request handler for a specified path.
+     * @param path
+     * @param route
+     */
+    public void post(String path, Route route) {
+        Handler han= new Handler();
+        han.body(route.handle("req", han));
+        postHandlers.put(path, han);
     }
+
+
+
 
 
     /**
@@ -164,17 +201,6 @@ public class HttpServer {
 
     }
 
-    /**
-     *method that returns the page to the user in the web
-     * @return
-     */
-    public static String getDefaultIndex() throws IOException {
-        // Cambia "index.html" al nombre de tu archivo HTML predeterminado
-        String htmlContenido = getHello("index.html");
-        String response = "HTTP/1.1 200 OK\r\n" +
-                "Content-type: text/html\r\n" +
-                "\r\n" + htmlContenido;
-        return response;
-    }
+
 }
 
