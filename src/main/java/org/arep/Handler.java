@@ -39,7 +39,7 @@ public class Handler {
             type = "Content-type: application/javascript";
         }else if (extension.equalsIgnoreCase("png")) {
             type = "Content-type: image/png";
-            body = Base64.getEncoder().encodeToString(HttpServer.getInstance().staticFiles.getImg(file));
+            body = Base64.getEncoder().encodeToString(HttpServer.getInstance().staticFiles.getImagen(file));
         }
     }
 

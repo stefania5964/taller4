@@ -1,6 +1,6 @@
 package org.arep;
 
 public interface Rest {
-    public String getHeader();
-    public String getBody();
+    public byte[] getHeader();
+    public byte[] getBody();
 }

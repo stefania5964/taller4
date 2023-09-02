@@ -57,7 +57,8 @@ public class HttpServer {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     clientSocket.getInputStream()));
-            String inputLine, outputLine;
+            String inputLine;
+            byte[] outputLine;
 
             boolean firstLine = true;
             String request = "/form";
@@ -79,31 +80,31 @@ public class HttpServer {
             if (method.equalsIgnoreCase("GET")) {
                 try {
                     if (request.equalsIgnoreCase("/")) {
-                        outputLine = staticFiles.getFile("/apps/form.html");
-                    } else if (staticFiles.checkFile(request)) {
+                        outputLine = (staticFiles.getFile("/apps/form.html")).getBytes();
+                    } else if (staticFiles.check(request)) {
                         System.out.println("ESTÁ EN STATIC");
-                        outputLine = staticFiles.getFile(request);
+                        outputLine = (staticFiles.getFile(request)).getBytes();
                     } else {
-                        outputLine = getHandlers.get(request).getResponse();
+                        outputLine = (getHandlers.get(request).getResponse()).getBytes();
                     }
                 }
                 catch (NullPointerException e) {
-                    outputLine = "";
+                    outputLine = ("").getBytes();
                 }
             } else /*if (method.equalsIgnoreCase("POST"))*/ {
                 try {
                     if (request.startsWith("/form?")) {
                         requestedMovie = request.replace("/form?s=", "");
-                        outputLine = "HTTP/1.1 200 OK\r\n" +
+                        outputLine = ("HTTP/1.1 200 OK\r\n" +
                                 "Content-type: application/json\r\n" +
                                 "\r\n"
-                                + getHello(requestedMovie.toLowerCase());
+                                + getHello(requestedMovie.toLowerCase())).getBytes();
                     } else {
                         System.out.println("DEVOLVIENDO: " + postHandlers.get(request).getResponse());
-                        outputLine = postHandlers.get(request).getResponse();
+                        outputLine = (postHandlers.get(request).getResponse()).getBytes();
                     }
                 } catch (NullPointerException e) {
-                    outputLine = "";
+                    outputLine = ("").getBytes();
                 }
             }
 
@@ -123,11 +124,17 @@ public class HttpServer {
     public void addService(String key, Rest service) {
         services.put(key, service);
     }
-    private String getStaticFile(String Name)  {
+    private byte[] getStaticFile(String Name)  {
         Rest rest = services.get(Name);
-        String header = rest.getHeader();
-        String body = rest.getBody();
-        return header + body;
+        byte[] header = rest.getHeader();
+        byte[] body = rest.getBody();
+        byte[] i = new byte[header.length + body.length ];
+        for (int index = 0; index < header.length; index++){
+            i[index]= header[index];
+        }for(int index = header.length; index< i.length; index++){
+            i[index]= body[index-header.length];
+        }
+        return i;
     }
 
 

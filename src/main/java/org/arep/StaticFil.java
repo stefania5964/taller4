@@ -17,7 +17,7 @@ public class StaticFil {
      * @param file file
      * @return yes if the file exists, no otherwise
      */
-    public boolean checkFile(String file) {
+    public boolean check(String file) {
         boolean res;
         try {
             Files.readAllBytes(Paths.get(location + file));
@@ -46,7 +46,7 @@ public class StaticFil {
         return han.getResponse();
     }
 
-    public byte[] getImg(String file) {
+    public byte[] getImagen(String file) {
         byte[] fileContent;
         try {
             fileContent = Files.readAllBytes(Paths.get(location + file));
