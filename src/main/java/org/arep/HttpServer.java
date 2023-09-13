@@ -6,8 +6,10 @@ import java.net.URL;
 import java.net.*;
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.lang.reflect.InvocationTargetException;
 /**
  * server gets the movie search services
  */
@@ -33,7 +35,7 @@ public class HttpServer {
      * @param args
      * @throws IOException
      */
-    public void run(String[] args) throws IOException {
+    public void run(List<String> args) throws IOException, InvocationTargetException, IllegalAccessException, ClassNotFoundException  {
         //para escuchar en el puerto
         ServerSocket serverSocket = null;
         try {
@@ -76,12 +78,19 @@ public class HttpServer {
                 }
             }
 
+            ComponentLoader.cargarComponentes(new String[]{"org.example.HelloServices"});
             String requestedMovie;
             if (method.equalsIgnoreCase("GET")) {
                 try {
                     if (request.equalsIgnoreCase("/")) {
                         outputLine = (staticFiles.getFile("/apps/form.html")).getBytes();
-                    } else if (staticFiles.check(request)) {
+                    } else if (request.startsWith("/hello?")) {
+                        outputLine = ("HTTP/1.1 200 OK\r\n"
+                                                        +"Content-Type: application/json\r\n"
+                                                        +"\r\n"
+                                                        +ComponentLoader.ejecutar("/hello", request)).getBytes();
+                        }
+                    else if (staticFiles.check(request)) {
                         System.out.println("ESTÁ EN STATIC");
                         outputLine = (staticFiles.getFile(request)).getBytes();
                     } else {
@@ -90,6 +99,10 @@ public class HttpServer {
                 }
                 catch (NullPointerException e) {
                     outputLine = ("").getBytes();
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
                 }
             } else /*if (method.equalsIgnoreCase("POST"))*/ {
                 try {
